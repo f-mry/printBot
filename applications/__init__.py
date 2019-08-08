@@ -6,25 +6,26 @@ from linebot.exceptions import InvalidSignatureError
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '5ca5d261647a39ae9f9c82a1413a39b8'
 
-lineBot = LineBotApi(CHANNEL_ACCESS_TOKEN)
-eventHandler = WebhookHandler(CHANNEL_SECRET)
+line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
+event_handler = WebhookHandler(CHANNEL_SECRET)
 
+from applications import upload_helper
 from applications import handler
+
 
 @app.route("/")
 def index():
     return 'Hello World'
 
+
 @app.route('/callback' , methods=['POST'])
 def callack():
     signature = request.headers['X-Line-Signature']
-
     body = request.get_data(as_text=True)
     app.logger.info('\nRequest Data: \n' + body)
 
     try:
-        eventHandler.handle(body,signature)
-
+        event_handler.handle(body,signature)
     except InvalidSignatureError as e:
         app.logger.error(e)
         abort(400)

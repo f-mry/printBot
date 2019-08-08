@@ -1,74 +1,53 @@
-from applications import eventHandler, lineBot, app
 from flask import render_template, request, url_for
-from applications.pdf_helper import UploadForm, parsePDFMeta, savePdfFile
+from applications import event_handler, line_bot_api, app
 from linebot.exceptions import LineBotApiError
-from linebot.models import (
-        MessageEvent, TextMessage, TextSendMessage, FollowEvent, 
-        )
+from linebot.models import (MessageEvent, TextMessage, TextSendMessage,
+                            FollowEvent)
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
-def createUploadURL(user_id):
-    print(user_id)
+
+def create_upload_url(user_id):
     tokenizer = Serializer(app.config['SECRET_KEY'],600)
-    userToken = tokenizer.dumps({ 'user_id': user_id }).decode('utf-8')
-    url = "{}".format(url_for('upload', token=userToken, _external=True))
+    token = tokenizer.dumps({ 'user_id': user_id }).decode('utf-8')
+    url = "{}".format(url_for('upload_pdf', token=token, _external=True))
     return url
 
-def verifyToken(token):
-    tokenLoader = Serializer(app.config['SECRET_KEY'])
+
+def send_billing(billing_info):
+    user_id = billing_info.get('user_id')
+    total_pages = billing_info.get('total_pages')
+    colored_pages = billing_info.get('colored_pages')
+    bw_pages = billing_info.get('bw_pages')
+    total_prices = billing_info.get('total_prices')
+
+    text_message = (f'Total print untuk {total_pages} lembar\n'
+                    + f'Halaman warna : {colored_pages}\n'
+                    + f'Halaman hitam-putih : {bw_pages}\n'
+                    + f'Total = Rp. {total_prices}')
+
     try:
-        user_id = tokenLoader.loads(token)['user_id']
-    except :
-        return None
-    return user_id
-
-def totalPrice(num_pages):
-    pricePerPage = 500
-    return num_pages*pricePerPage
-
-def sendConfirmation(user_id,num_pages,totalPrice):
-    lineBot.push_message( user_id,[ TextSendMessage(text='Total print untuk {} lembar = Rp. {}'.format(num_pages,totalPrice)) ])
+        line_bot_api.push_message(user_id,[TextSendMessage(text=text_message)])
+    except Exception as e:
+        print(e)
 
 
-@eventHandler.add(MessageEvent, message=TextMessage)
-def textMessageHandler(event):
+@event_handler.add(MessageEvent, message=TextMessage)
+def text_handler(event):
     user_id = event.source.user_id
-    print("Handler: "+user_id)
-    text = event.message.text
-    profile = lineBot.get_profile(user_id)
+    message_text = event.message.text
+    user_profile = line_bot_api.get_profile(user_id)
 
-    if text == 'Print':
-        uploadURL = createUploadURL(user_id)
-        lineBot.reply_message(
-                event.reply_token,[
-                    TextMessage(text='Hai '+ profile.display_name),
-                    TextMessage(text='Silahkan upload file dalam bentuk pdf ke link berikut ini\n"'+uploadURL+'"')
-                    ]
-                )
+    if message_text == '/Print' or '/print':
+        upload_url = create_upload_url(user_id)
+        reply_text = (
+            'Silahkan upload file dalam bentuk pdf ke link berikut ini\n' 
+            + upload_url)
+
+        line_bot_api.reply_message(event.reply_token,
+                                   TextMessage(text=reply_text))
+
 
 @app.route('/test/<user_id>')
 def testing(user_id):
-    url = createUploadURL(user_id)
+    url = create_upload_url(user_id)
     return url
-
-@app.route('/upload/<token>', methods=['GET','POST'])
-def upload(token):
-    form = UploadForm()
-    user_id = verifyToken(token)
-    if form.validate_on_submit():
-        try:
-            pdfFile = request.files['pdfFileForm']
-            pdfPath = (savePdfFile(pdfFile))
-            pdfInfo =  parsePDFMeta(pdfPath)
-        except Exception as e:
-            print(e)
-        num_pages = pdfInfo['num_pages']
-        sendConfirmation(user_id,num_pages,totalPrice(num_pages))
-        return render_template('success.html')
-    else:
-        if user_id != None:
-            return render_template('upload.html', form=form)
-        else:
-            return 'Oops Time Out'
-
-
