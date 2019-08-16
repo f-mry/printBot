@@ -1,9 +1,9 @@
 from applications import app
-from flask import render_template, request 
+from flask import render_template, request
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
 from wtforms import FileField, SubmitField
-from wtforms.validators import DataRequired 
+from wtforms.validators import DataRequired
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from applications.pdf_color import get_pdf_info
 from applications.handler import send_billing
@@ -44,7 +44,7 @@ def create_billing(user_id,page_info):
 
     colored_pages_prices = 700
     bw_pages_prices = 500
-    total_prices = ((colored_pages_prices * colored_pages) 
+    total_prices = ((colored_pages_prices * colored_pages)
                      + (bw_pages_prices * bw_pages))
 
     billing_info = {'user_id' : user_id,
@@ -67,7 +67,7 @@ def upload_pdf(token):
             pdf_path = save_file(pdf_file)
         except Exception as e:
             print(e)
-            
+
         pdf_info = get_pdf_info(pdf_path)
         billing_info = create_billing(user_id,pdf_info)
         send_billing(billing_info)
@@ -78,7 +78,7 @@ def upload_pdf(token):
             return render_template('upload.html', form=form)
         else:
             return 'Time Out'
-        
+
 
 
 

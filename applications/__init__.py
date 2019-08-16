@@ -1,5 +1,5 @@
 from applications.config import CHANNEL_ACCESS_TOKEN,CHANNEL_SECRET
-from flask import Flask, request, abort, render_template, url_for
+from flask import Flask, request, abort, render_template, url_for, make_response, jsonify
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 
@@ -16,6 +16,20 @@ from applications import handler
 @app.route("/")
 def index():
     return 'Hello World'
+
+@app.route("/testing", methods=['GET','POST'])
+def test():
+    if request.method == 'POST':
+        try:
+            # data = request.form.get('file')
+            # print(data.filename)
+            pdf_file = request.files['file']
+            pdf_file = upload_helper.save_file(pdf_file)
+            res = make_response(jsonify({"message" : "File Uploaded"}), 200)
+        except Exception as e:
+            print(e)
+
+    return render_template('UploadFile.html')
 
 
 @app.route('/callback' , methods=['POST'])

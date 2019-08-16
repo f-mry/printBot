@@ -1,0 +1,103 @@
+*,
+*:after,
+*:before {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box; }
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0; }
+
+body {
+  background: linear-gradient(to top, #4F6072, #8699AA);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; }
+
+.box_wrapper {
+  background-color: #fff;
+  border-radius: 5px;
+  text-align: center; }
+  .box_wrapper .upload {
+    text-align: center;
+    position: relative;
+    width: 350px;
+    min-height: 300px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    padding: 10px;
+    padding-bottom: 20px;
+    margin: 15px;
+    background: #fff;
+    border-style: dashed;
+    border-width: 2px;
+    overflow: hidden;
+    padding: 6.25em 1.25em; }
+    .box_wrapper .upload :hover {
+      color: red; }
+
+.box_wrapper + .button_wrapper {
+  margin-top: 2rem; }
+
+.button_wrapper {
+  background-color: brown; }
+
+.inputfile {
+  width: 0px;
+  height: 0px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1; }
+
+.inputfile + label {
+  max-width: 80%;
+  font-size: 1.25em;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  text-overflow: ellipsis;
+  display: inline-block;
+  padding: 0.625rem 1.25rem; }
+  .inputfile + label span, .inputfile + label strong {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis; }
+  .inputfile + label svg {
+    width: 100%;
+    height: 100%;
+    vertical-align: middle;
+    fill: currentColor;
+    margin-top: -0.25em;
+    /* 4px */
+    margin-right: 0.25em;
+    /* 4px */ }
+
+button {
+  border: none;
+  padding: 1em;
+  text-align: center;
+  display: inline-block;
+  font-size: 1em;
+  width: 300px; }
+
+.progress-bar {
+  margin-top: 1rem;
+  border-radius: 60px;
+  overflow: hidden;
+  width: 350px; }
+  .progress-bar span {
+    display: block; }
+
+.bar {
+  background: rgba(0, 0, 0, 0.075); }
+
+.progress {
+  animation: ease;
+  background: #75b800;
+  color: #fff;
+  padding: 5px;
+  width: 20%; }
