@@ -96,8 +96,8 @@ button {
   background: rgba(0, 0, 0, 0.075); }
 
 .progress {
-  animation: ease;
+  animation: ease 1s;
   background: #75b800;
   color: #fff;
   padding: 5px;
-  width: 20%; }
+  width: 0%; }

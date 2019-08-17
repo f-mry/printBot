@@ -12,6 +12,7 @@
             <div class="upload">
                 <!-- <div class="drop_area"> -->
                 <form action="" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token()  }}"/>
 
                     <input id="input_file" name="file" type="file" class="inputfile" oninput="update_filename()">
 

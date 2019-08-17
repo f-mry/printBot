@@ -3,4 +3,5 @@ applications/cust_file/*
 applications/TMP_FOLDER/*
 applications/UPLOAD_FOLDER/*
 tags
+.vim
 

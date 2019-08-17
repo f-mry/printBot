@@ -32,12 +32,13 @@ def verify_token(token):
     tokenLoader = Serializer(app.config['SECRET_KEY'])
     try:
         user_id = tokenLoader.loads(token)['user_id']
-    except:
+    except Exception as e:
+        print(e)
         return None
     return user_id
 
 
-def create_billing(user_id,page_info):
+def create_billing(user_id, page_info):
     total_pages = page_info.get('total_pages')
     colored_pages = page_info.get('colored_pages')
     bw_pages = page_info.get('bw_pages')
@@ -45,18 +46,18 @@ def create_billing(user_id,page_info):
     colored_pages_prices = 700
     bw_pages_prices = 500
     total_prices = ((colored_pages_prices * colored_pages)
-                     + (bw_pages_prices * bw_pages))
+                    + (bw_pages_prices * bw_pages))
 
-    billing_info = {'user_id' : user_id,
-                    'total_pages' : total_pages,
-                    'colored_pages' : colored_pages,
-                    'bw_pages' : bw_pages,
-                    'total_prices' : total_prices}
+    billing_info = {'user_id': user_id,
+                    'total_pages': total_pages,
+                    'colored_pages': colored_pages,
+                    'bw_pages': bw_pages,
+                    'total_prices': total_prices}
     print(billing_info)
     return billing_info
 
 
-@app.route('/upload/<token>', methods=['GET','POST'])
+@app.route('/upload/<token>', methods=['GET', 'POST'])
 def upload_pdf(token):
     form = UploadForm()
     user_id = verify_token(token)
@@ -69,16 +70,37 @@ def upload_pdf(token):
             print(e)
 
         pdf_info = get_pdf_info(pdf_path)
-        billing_info = create_billing(user_id,pdf_info)
+        billing_info = create_billing(user_id, pdf_info)
         send_billing(billing_info)
         return render_template('success.html')
 
     else:
-        if user_id != None:
+        if user_id is not None:
             return render_template('upload.html', form=form)
         else:
             return 'Time Out'
 
 
+@app.route('/testing/upload/<token>', methods=['GET', 'POST'])
+def upload_testing(token):
+    user_id = verify_token(token)
 
+    if user_id is not None:
 
+        if request.method == 'POST':
+            try:
+                pdf_file = request.files['file']
+                pdf_path = save_file(pdf_file)
+            except Exception as e:
+                print(e)
+
+            pdf_info = get_pdf_info(pdf_path)
+            billing_info = create_billing(user_id, pdf_info)
+            send_billing(billing_info)
+            return render_template('success.html')
+
+        else:
+            return render_template('UploadFile.html')
+
+    else:
+        return 'Time Out'
