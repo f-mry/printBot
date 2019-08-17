@@ -3,12 +3,14 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="stylesheet" href="{{ url_for('static', filename='UploadFile.css') }}">
+        <link rel="stylesheet" href="../static/UploadFile.css">
+        
         <title>Upload File</title>
     </head>
     <body>
-
+        <h1>Print In</h1>
         <div class="box_wrapper">
+            <!-- <h2>Upload File</h2> -->
             <div class="upload">
                 <!-- <div class="drop_area"> -->
                 <form action="" method="POST" enctype="multipart/form-data">
@@ -43,6 +45,6 @@
             </span>
         </div>
 
-        <script src="{{ url_for('static', filename='UploadFile.js') }}"></script>
+        <script src="../static/UploadFile.js"></script>
     </body>
 </html>

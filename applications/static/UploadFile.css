@@ -11,14 +11,29 @@ body {
   padding: 0; }
 
 body {
-  background: linear-gradient(to top, #4F6072, #8699AA);
+  /* background: linear-gradient(to top, #4F6072, #8699AA); */
+  background-image: url(../img/img1.png);
+  background-size: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column; }
 
+h1{
+  font-size: 50px;
+  font-weight: bold;
+  /* text-align: center; */
+  margin: 10px 0;
+  margin-top: 30px;
+  /* text-transform: uppercase; */
+  color: #b8b8dd;
+  text-shadow: 1.5px 1.5px 0 #333, 0px 1.5px 0 #333, -1.5px -1.5px 0 #333, -1.5px -1.5px 0 #333, -1.5px 1.5px 0 #333, 1.5px -1.5px 0 #333, 0.7778174593px 0.7778174593px 0 #aaaaaa, 1.5556349186px 1.5556349186px 0 #aaaaaa, 2.3334523779px 2.3334523779px 0 #aaaaaa, 3.1112698372px 3.1112698372px 0 #aaaaaa, 3.8890872965px 3.8890872965px 0 #aaaaaa, 4.6669047558px 4.6669047558px 0 #aaaaaa, 5.4447222151px 5.4447222151px 0 #aaaaaa, 6.2225396744px 6.2225396744px 0 #aaaaaa, 7.0003571337px 7.0003571337px 0 #aaaaaa, 7.7781745931px 7.7781745931px 0 #aaaaaa;
+
+}
+
 .box_wrapper {
   background-color: #fff;
+  background: linear-gradient(to top, rgb(248, 242, 250), rgb(211, 208, 212));
   border-radius: 5px;
   text-align: center; }
   .box_wrapper .upload {
@@ -31,19 +46,19 @@ body {
     padding: 10px;
     padding-bottom: 20px;
     margin: 15px;
-    background: #fff;
+    /* background: #fff; */
     border-style: dashed;
     border-width: 2px;
     overflow: hidden;
     padding: 6.25em 1.25em; }
     .box_wrapper .upload :hover {
-      color: red; }
-
+      color: rgba(52, 18, 240, 0.918); }
+  
 .box_wrapper + .button_wrapper {
   margin-top: 2rem; }
 
 .button_wrapper {
-  background-color: brown; }
+  background-color: rgba(69, 59, 126, 0.534); }
 
 .inputfile {
   width: 0px;
@@ -82,7 +97,9 @@ button {
   text-align: center;
   display: inline-block;
   font-size: 1em;
-  width: 300px; }
+  width: 300px;}
+
+
 
 .progress-bar {
   margin-top: 1rem;
